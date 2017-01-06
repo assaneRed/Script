@@ -67,7 +67,7 @@ function getConnections
     $pwd = ConvertTo-SecureString "lsa@2300" -AsPlainText -Force
     $cred = New-Object Management.Automation.PSCredential ('red',$pwd)
     $url = "https://"+$ip+":8384/rest/system/connections"
-    Invoke-WebRequest -Uri $url -Method Get -Credential $cred | Format-List "content"
+    Invoke-WebRequest -Uri $url -Method Get -Credential $cred -UseBasicParsing | Format-List "content"
     
 }
 
@@ -82,7 +82,7 @@ function getCompletion
     $pwd = ConvertTo-SecureString "lsa@2300" -AsPlainText -Force
     $cred = New-Object Management.Automation.PSCredential ('red',$pwd)
     $url = "https://"+$param.IP+":8384/rest/db/completion?device="+$param.DeviceID+"&folder="+$param.Folder
-    Invoke-WebRequest -Uri $url -Method Get -Credential $cred | Format-List "content"
+    Invoke-WebRequest -Uri $url -Method Get -Credential $cred -UseBasicParsing | Format-List "content"
 }
 
 #Prend en paramètre l'ID d'un device et retourne un string contenant le nom du device
