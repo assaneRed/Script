@@ -53,7 +53,7 @@ function mail
     $pwd = ConvertTo-SecureString "newlsa2300" -AsPlainText -Force
     $cred = New-Object Management.Automation.PSCredential ('nrobidel@redtechnologies.fr',$pwd)
     $from = "Syncthing <nrobidel@redtechnologies.fr>"
-    $to = "Nicolas ROBIDEL <nrobidel@redtechnologies.fr>"
+    $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>","Paul LEREBOURG <plerebourg@redtechnologies.fr>")
     $body = "Bonjour,`n`n$messageMail `n`nCordialement, message systeme."
     Send-MailMessage -smtpserver $smtpserver -from $from -to $to -subject $subject -body $body -Credential $cred -priority High
 }
