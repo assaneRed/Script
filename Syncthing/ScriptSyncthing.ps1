@@ -1,8 +1,8 @@
-﻿#Script d'alerte en cas de problème de synchronisation de SyncThing
-#Version 1.0
-#Auteur: Nicolas ROBIDEL
+﻿# Script to alert admins in case of issues with Syncthing's backup
+# Version 1.1
+# Autor: Nicolas ROBIDEL
 
-#Ignore le certificat SSL
+# Ignore SSL certificate
 Add-Type @"
     using System;
     using System.Net;
@@ -29,23 +29,21 @@ Add-Type @"
 
 [ServerCertificateValidationCallback]::Ignore();
 
-#Déclaration de variables
-$compteurErreursConnexions=0
-$compteurErreursCompletion=0
-$message = ""
-$messageCompletion = ""
+#Declaration of variables
 $messageMail=""
-$IPs = "192.168.1.32", "192.168.1.2", "37.187.25.79"
 
-#Paramètres pour getCompletion (Objets à 3 propriétés : ip du serveur de d'origine, id du serveur de destination, id du folder) 
-$compGitNas_redmineFiles = New-Object PSObject -Property @{IP="192.168.1.32"; DeviceID="YB355HA-PW5XWDP-R37EHXH-NQOYKSQ-2G5NCXS-GGGM2H2-AE5MSAP-LFI6SAU"; Folder="redmineFiles"}
-$compGitNas_redmineDb = New-Object PSObject -Property @{IP="192.168.1.32"; DeviceID="YB355HA-PW5XWDP-R37EHXH-NQOYKSQ-2G5NCXS-GGGM2H2-AE5MSAP-LFI6SAU"; Folder="redmineDb"}
-$compGitNas_gitrepo = New-Object PSObject -Property @{IP="192.168.1.32"; DeviceID="YB355HA-PW5XWDP-R37EHXH-NQOYKSQ-2G5NCXS-GGGM2H2-AE5MSAP-LFI6SAU"; Folder="gitrepositories"}
-$compNasOvh_gitrepo = New-Object PSObject -Property @{IP="192.168.1.2"; DeviceID="PGF4U2Z-V7AD7KP-TMUU2P5-3UVG7BH-PD3XPIS-DJ5H54I-NADG2GT-BXZG2QU"; Folder="gitrepositories"}
-$compNasOvh_sharedDisk = New-Object PSObject -Property @{IP="192.168.1.2"; DeviceID="PGF4U2Z-V7AD7KP-TMUU2P5-3UVG7BH-PD3XPIS-DJ5H54I-NADG2GT-BXZG2QU"; Folder="SharedDisk"}
-$completion = $compGitNas_redmineFiles, $compGitNas_redmineDb, $compGitNas_gitrepo, $compNasOvh_gitrepo, $compNasOvh_sharedDisk
+# Parameters for getConnection function (Objects with 3 properties : Server's IP, API Key and name)
+$connGIT = New-Object PSObject -Property @{IP="192.168.1.32"; API = "FoQZE5DLTPDlrdRuLxjIH0kd48h808Su"; Server= "GIT"}
+$connNAS = New-Object PSObject -Property @{IP="192.168.1.2"; API = "4mb4eJi3nTh-T6Zb2gvx-6qgzS-nKmd6"; Server= "NAS"}
+$connOVH = New-Object PSObject -Property @{IP="37.187.25.79"; API = "QJ5w7HBjlvvdtpISyo0k760evKiGWjb2"; Server= "OVH"}
+$connections = $connGIT, $connNAS, $connOVH
 
-#Fonction envoi de mail prend 2 paramètres (string) le sujet du mail et le message
+# Parameters for getCompletion function (Objects with 6 properties : source server's IP and API Key, destination server's ID, array of folder's ID, source server's name and destination server's name) 
+$compGitNas = New-Object PSObject -Property @{IP="192.168.1.32"; API = "FoQZE5DLTPDlrdRuLxjIH0kd48h808Su"; DeviceID="YB355HA-PW5XWDP-R37EHXH-NQOYKSQ-2G5NCXS-GGGM2H2-AE5MSAP-LFI6SAU"; Folder="redmineFiles","redmineDb","gitrepositories"; serverSource= "GIT"; serverDestination= "NAS"}
+$compNasOvh = New-Object PSObject -Property @{IP="192.168.1.2"; API = "4mb4eJi3nTh-T6Zb2gvx-6qgzS-nKmd6"; DeviceID="PGF4U2Z-V7AD7KP-TMUU2P5-3UVG7BH-PD3XPIS-DJ5H54I-NADG2GT-BXZG2QU"; Folder="gitrepositories","SharedDisk"; serverSource= "NAS"; serverDestination= "OVH"}
+$completion = $compGitNas, $compNasOvh
+
+# Function used to send mails, takes 2 string parameters: subject and body of the mail
 function mail
 {
     param($subject, $messageMail)
@@ -53,76 +51,52 @@ function mail
     $pwd = ConvertTo-SecureString "newlsa2300" -AsPlainText -Force
     $cred = New-Object Management.Automation.PSCredential ('nrobidel@redtechnologies.fr',$pwd)
     $from = "Syncthing <nrobidel@redtechnologies.fr>"
-    $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>","Paul LEREBOURG <plerebourg@redtechnologies.fr>")
-    $body = "Bonjour,`n`n$messageMail `n`nCordialement, message systeme."
+    $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>", "Paul LEREBOURG <plerebourg@redtechnologies.fr>")
+    $body = "Hi,`n`n$messageMail `n`nRegards, System message."
     Send-MailMessage -smtpserver $smtpserver -from $from -to $to -subject $subject -body $body -Credential $cred -priority High
 }
 
-# Fonction permettant de récupérer la liste des connections et la date des connections (.../rest/system/connections)
-# Cette fonction prend un paramètre:
-#     - l'ip de la machine
+# Function used to execute the web requests. It is used in both getConnection and getCompletion
+# Takes 2 parameters : URL and device's API Key
+function webRequest
+{
+    param($url, $api)
+    Invoke-WebRequest -Uri $url -Method Get -Headers @{"X-API-Key" = "$api"} -UseBasicParsing | Format-List "content"
+}
+
+# Function used to get a list of connections with the dates (.../rest/system/connections)
+# Takes 2 parameters: Device's IP & API Key
 function getConnections
 {
-    param ([string]$ip)
-    $pwd = ConvertTo-SecureString "lsa@2300" -AsPlainText -Force
-    $cred = New-Object Management.Automation.PSCredential ('red',$pwd)
-    $url = "https://"+$ip+":8384/rest/system/connections"
-    Invoke-WebRequest -Uri $url -Method Get -Credential $cred -UseBasicParsing | Format-List "content"
+    param ([string] $ip, [string] $api)
+    $url = "http://"+$ip+":8384/rest/system/connections"
+    webRequest $url $api
     
 }
 
-# Fonction permettant de récupérer l'etat de synchronisation d'un dossier provenant d'un device donné en paramètre. Le retour est un nombre représentant le pourcentage compris entre 0 et 100 (.../rest/db/completion)
-# Cette fonction prend trois paramètres:
-#     - l'ip de la machine
-#     - l'ID du device
-#     - l'ID du dossier
+# Fuction used to get the state of synchronisation for a given folder on a device given in parameter. It returns a number reprensenting the % of completion (.../rest/db/completion)
+# This function takes 2 parameters: Completion object and Folder's ID
 function getCompletion
 {
-    param ($param)
-    $pwd = ConvertTo-SecureString "lsa@2300" -AsPlainText -Force
-    $cred = New-Object Management.Automation.PSCredential ('red',$pwd)
-    $url = "https://"+$param.IP+":8384/rest/db/completion?device="+$param.DeviceID+"&folder="+$param.Folder
-    Invoke-WebRequest -Uri $url -Method Get -Credential $cred -UseBasicParsing | Format-List "content"
+    param ($param, $folder)
+    $url = "http://"+$param.IP+":8384/rest/db/completion?device="+$param.DeviceID+"&folder="+$folder
+    webRequest $url $param.API
 }
 
-#Prend en paramètre l'ID d'un device et retourne un string contenant le nom du device
-function getdeviceNameFromId
-{
-    param($id)
-    switch($id)
-    {
-        "W2Y7VJS-4BZNCSV-3E5WGJV-HKDU2PQ-LXI2YQL-M6YVQ6K-EDCFI2T-FZR2GQ6"{return "GIT"}
-        "YB355HA-PW5XWDP-R37EHXH-NQOYKSQ-2G5NCXS-GGGM2H2-AE5MSAP-LFI6SAU"{return "NAS"}
-        "PGF4U2Z-V7AD7KP-TMUU2P5-3UVG7BH-PD3XPIS-DJ5H54I-NADG2GT-BXZG2QU"{return "OVH"}
-        default{"Aucune correspondance trouvée"}
-    }
-}
-
-#Prend en paramètre l'IP d'un device et retourne un string contenant le nom du device
-function getDeviceNameFromIp
-{
-    param($ip)
-    switch($ip)
-    {
-        "192.168.1.32"{return "GIT"}
-        "192.168.1.2"{return "NAS"}
-        "37.187.25.79"{return "OVH"}
-        default{"Aucune correspondance trouvée"}
-    }
-}
-
-#Fonction prenant en paramètre un array d'adresses IP et utilise la fonction getConnection pour tester les connexions des éléments du tableau
-#Cela indique si les serveurs sont bien connectés (GIT et OVH doivent valoir 1 et le NAS quand a lui 2)
-function testConnexion
+# Function taking an array of connection objects as parameter and uses getConnection function to test connection to different servers 
+# Indicates if servers are connected (GIT & OVH must return 1 while NAS must return 2)
+function testConnection
 {
     param($connexion)
+    $script:compteurErreursConnexions=0
+    $message = ""
     foreach($element in $connexion)
     {
-        $result = getConnections $element | Out-String
-        $serveur = getDeviceNameFromIp $element
-        switch($element)
+        $result = getConnections $element.IP $element.API | Out-String
+        switch($element.IP)
         {
-            "192.168.1.2"
+            #Specific case for 192.168.1.2 because it's the only server connected to 2 servers, other are only connected to 1.
+            "192.168.1.2" 
             {
                 switch(([regex]::Matches($result, "true" )).count)
                 {
@@ -130,7 +104,7 @@ function testConnexion
                     default
                     {
                        $script:compteurErreursConnexions += 1
-                       $message += " - Probleme de connexion de SyncThing sur le serveur "+$serveur+".`n" 
+                       $message += " - Connection problem of Syncthing on server "+$element.Server+".`n" 
                     }
                 }
             }
@@ -139,7 +113,7 @@ function testConnexion
                 if(([regex]::Matches($result, "true" )).count -ne 1)
                 {
                     $script:compteurErreursConnexions += 1
-                    $message += " - Probleme de connexion de SyncThing sur le serveur "+$serveur+".`n"
+                    $message += " - Connection problem of Syncthing on server "+$element.Server+".`n"
                 }
             }
         }
@@ -147,54 +121,57 @@ function testConnexion
 
     if($compteurErreursConnexions -eq 0)
     {
-        $script:messageMail += "Aucune erreur de connexion rencontree lors des tests, tout semble OK.`n"
+        $script:messageMail += "No connection error encountered during the tests, everything seems OK.`n"
     }
     else
     { 
-        $script:messageMail += "ERREUR, $compteurErreursConnexions erreur(s) rencontree(s) lors des tests de connexions.`n"
+        $script:messageMail += "ERROR, $compteurErreursConnexions error(s) encountered during connection tests.`n"
     }
     $script:messageMail += $message
     }
 
-#Fonction prenant en paramètre un array contenant des objets paramètres ("ip","device id", "folder id") et vérifie l'etat de la synchronisation
+# Function taking an array of completion objects as parameter and checks synchronisation status using the getCompletion function
 function testCompletion
 {
     param($completion)
+    $script:compteurErreursCompletion=0
+    $messageCompletion = ""
     foreach($element in $completion)
     {
-        $result = getCompletion $element | Out-String
-        $source = getDeviceNameFromIp $element.IP
-        $destination = getDeviceNameFromId $element.DeviceID
-        if(([regex]::Matches($result,100 )).count -ne 1)
+        foreach($folder in $element.Folder)
         {
-            $script:compteurErreursCompletion+=1
-            $messageCompletion += " - Probleme de synchronisation du dossier "+$element.Folder+" du serveur "+$source+" vers le serveur "+$destination+".`n"
+            $result = getCompletion $element $folder| Out-String
+            if(([regex]::Matches($result,100)).count -ne 1)
+            {
+                $script:compteurErreursCompletion+=1
+                $messageCompletion += " - Synchronisation problem of folder "+$folder+" from server "+$element.serverSource+" to server "+$element.serverDestination+".`n"
         
-        }
+            }
+        }    
     }
     if($compteurErreursCompletion -eq 0)
     {
-        $script:messageMail += "Aucune erreur de synchronisation rencontree lors des tests, tout semble OK.`n"
+        $script:messageMail += "No synchronisation error encountered during the tests, everything seems OK.`n"
     }
     else
     {
-        $script:messageMail += "ERREUR, $compteurErreursCompletion erreur(s) rencontree(s) lors des tests de synchronisation.`n"
+        $script:messageMail += "ERROR, $compteurErreursCompletion error(s) encountered during synchronisation tests.`n"
     }
     $script:messageMail += $messageCompletion
 }
 
-#Fonctions lançant les différents tests et envoyant le mail de rapport a l'admin en utilisant les fonctions mail, testConnexion et testCompletion
+#Function executing tests and sending mail to keep the admin updated (using mail, testConnection & testCompletion functions)
 function main
 {
-    testConnexion $IPs
+    testConnection $connections
     testCompletion $completion
     if ($compteurErreursConnexions -ne 0 -or $compteurErreursCompletion -ne 0)
     {
-        mail "ERREUR ! Rapport Syncthing" $messageMail
+        mail "ERROR ! Syncthing Report" $messageMail
     }
     else
     {
-        mail "OK ! Rapport Syncthing" $messageMail
+        mail "OK ! Syncthing Report" $messageMail
     }
     echo $messageMail
 }
