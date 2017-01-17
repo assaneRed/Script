@@ -53,7 +53,7 @@ function mail
     $pwd = "76492d1116743f0423413b16050a5345MgB8AE8AcgB0AFUANAA3AGYAcQBiADAAZwBJAGgAeQB6AG0AKwBRAGQAMgAvAEEAPQA9AHwAMABmADYANgBkAGIAMQBiADUAYQA5AGUAMAA0ADEAMwAwADAAMgBmADEANgA0AGYAOABmAGIAZAA5AGUANwBjADkAMQAyADYAZQBmADQAOQA0ADYAOQA4ADcANAAxAGMANAA0AGUAZABhADMANwA2ADMAZAA4ADcAYgA4ADMAZAA="
     $cred = New-Object System.Management.Automation.PsCredential 'nrobidel@redtechnologies.fr',($pwd | ConvertTo-SecureString -Key $key)
     $from = "Syncthing <nrobidel@redtechnologies.fr>"
-    $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>")
+    $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>", "Paul LEREBOURG <plerebourg@redtechnologies.fr>")
     $body = "Hi,`n`n$messageMail `n`nRegards, System message."
     Send-MailMessage -smtpserver $smtpserver -from $from -to $to -subject $subject -body $body -Credential $cred -priority High
 }
