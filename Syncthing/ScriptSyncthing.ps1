@@ -48,10 +48,13 @@ function mail
 {
     param($subject, $messageMail)
     $smtpServer = "ssl0.ovh.net"
-    #Secure string version of our password
-    $pwd = '01000000d08c9ddf0115d1118c7a00c04fc297eb0100000019d930eb8aff6c499967aabbfb4628780000000002000000000003660000c00000001000000021717f6a903ad968eec2c41f049cff530000000004800000a00000001000000061ac8893241f7de6a703a6dcfdfeaa3c1800000001596e0f660d8159a41d4db0b8dc2cdabdae3945c002323e14000000372a93930f3f282a74e272a16c00f7fa4751f25a'
-    chiffré = 
-    $cred = New-Object System.Management.Automation.PsCredential 'nrobidel@redtechnologies.fr',(ConvertTo-SecureString -String $pwd -AsPlainText -Force)
+    # Password encrypted from Jenkins
+    $pwd = "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000019d930eb8aff6c499967aabbfb4628780000000002000000000003660000c0000000100000009433563cf588ff67ee94349b014a65ba0000000004800000a000000010000000a62f89ebce463cc330e07ef0c214e03c180000005e02ca2a5f84d4d6882966655b178323bf8f8ddb24192cdd14000000d1c2c0386da20f637d6a8c8500b6411434310001"
+    # Password encrypted from my computer
+    #$pwd = '01000000d08c9ddf0115d1118c7a00c04fc297eb01000000d2eb9e676ebc694d9b0aa80fcb0eb2190000000002000000000010660000000100002000000043bc341dfa9cd33fe588a50d61fa39432267e7f6738a931888608991f7c10c6d000000000e8000000002000020000000c2d6c18f4df36c1df508d401c9b1d3f1306872f4018ca20a170e09a8c1caaa662000000051e861f51298250d4d3e470c3a37d6f040a512f91104444ab7e3020676752c8340000000d00d5943defd9d849032673f97b7428eeefa0037505f62002a64d17c58b7c243272a726166de7efd999d02153d2b1b2eebf3761f0c853e4a6ca35c521891fac4'
+    echo $pwd
+    echo $pwd | ConvertTo-SecureString
+    $cred = New-Object System.Management.Automation.PsCredential 'nrobidel@redtechnologies.fr',(ConvertTo-SecureString -String $pwd)
     $from = "Syncthing <nrobidel@redtechnologies.fr>"
     $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>")
     $body = "Hi,`n`n$messageMail `n`nRegards, System message."
