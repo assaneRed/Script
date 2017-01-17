@@ -50,7 +50,7 @@ function mail
     $smtpServer = "ssl0.ovh.net"
     #Secure string version of our password
     $pwd = '01000000d08c9ddf0115d1118c7a00c04fc297eb0100000019d930eb8aff6c499967aabbfb4628780000000002000000000003660000c000000010000000f0661bb9aeeae00aa9d9b993e0aa30f60000000004800000a00000001000000073d36d84c800c0f87dc7105b33e91051180000008302ae381103c0b1b48c2a389af53484e2c97525365ae04d140000009230969e548814db8ba8e465ab599dd1dcc9785f'
-    $cred = New-Object Management.Automation.PSCredential ('nrobidel@redtechnologies.fr',($pwd | ConvertTo-SecureString))
+    $cred = New-Object Management.Automation.PSCredential 'nrobidel@redtechnologies.fr',("$pwd" | ConvertTo-SecureString)
     $from = "Syncthing <nrobidel@redtechnologies.fr>"
     $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>")
     $body = "Hi,`n`n$messageMail `n`nRegards, System message."
