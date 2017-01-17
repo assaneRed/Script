@@ -48,9 +48,9 @@ function mail
 {
     param($subject, $messageMail)
     $smtpServer = "ssl0.ovh.net"
-    #Looks for the password in the file cred.txt on the Jenkins server (the file contains the password saved as a secure string)
-    $pwd = cat 'C:\Jenkins\cred.txt' | ConvertTo-SecureString
-    $cred = New-Object Management.Automation.PSCredential ('nrobidel@redtechnologies.fr',$pwd)
+    #Secure string version of our password
+    $pwd = "01000000d08c9ddf0115d1118c7a00c04fc297eb01000000d2eb9e676ebc694d9b0aa80fcb0eb21900000000020000000000106600000001000020000000d7be393ca06462f7b471af964e62244735c108c34d4db61ce4de6eeae150ed40000000000e8000000002000020000000c53786a1685398518f93035201f752e7795776d5911c7ec649264947e5d8b360200000006bb89ab9ab860e75ad9c072c94e6d73b6f5b428c4aed7dbeeb40568c85c46cd940000000be039696446edc976138dddee311545b1c3715455113d757f81ed981c3245691d863074f6582fa4d203c6612d5972f88fc0104b114d801ae71bab82e98748f1e"
+    $cred = New-Object Management.Automation.PSCredential ('nrobidel@redtechnologies.fr',($pwd | ConvertTo-SecureString))
     $from = "Syncthing <nrobidel@redtechnologies.fr>"
     $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>")
     $body = "Hi,`n`n$messageMail `n`nRegards, System message."
