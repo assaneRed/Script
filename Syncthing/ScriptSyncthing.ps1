@@ -51,7 +51,7 @@ function mail
     #Secure string version of our password
     $pwd = '01000000d08c9ddf0115d1118c7a00c04fc297eb0100000019d930eb8aff6c499967aabbfb4628780000000002000000000003660000c00000001000000021717f6a903ad968eec2c41f049cff530000000004800000a00000001000000061ac8893241f7de6a703a6dcfdfeaa3c1800000001596e0f660d8159a41d4db0b8dc2cdabdae3945c002323e14000000372a93930f3f282a74e272a16c00f7fa4751f25a'
     chiffré = 
-    $cred = New-Object System.Management.Automation.PsCredential 'nrobidel@redtechnologies.fr',(ConvertTo-SecureString -String $pwd)
+    $cred = New-Object System.Management.Automation.PsCredential 'nrobidel@redtechnologies.fr',(ConvertTo-SecureString -String $pwd -AsPlainText -Force)
     $from = "Syncthing <nrobidel@redtechnologies.fr>"
     $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>")
     $body = "Hi,`n`n$messageMail `n`nRegards, System message."
