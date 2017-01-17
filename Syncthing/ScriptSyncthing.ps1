@@ -48,10 +48,11 @@ function mail
 {
     param($subject, $messageMail)
     $smtpServer = "ssl0.ovh.net"
-    $pwd = ConvertTo-SecureString "newlsa2300" -AsPlainText -Force
+    #Looks for the password in the file cred.txt on the Jenkins server (the file contains the password saved as a secure string)
+    $pwd = Get-Content 'C:\Program Files (x86)\Jenkins\workspace\Check Syncthing\Syncthing\cred.txt' | ConvertTo-SecureString
     $cred = New-Object Management.Automation.PSCredential ('nrobidel@redtechnologies.fr',$pwd)
     $from = "Syncthing <nrobidel@redtechnologies.fr>"
-    $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>", "Paul LEREBOURG <plerebourg@redtechnologies.fr>")
+    $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>")
     $body = "Hi,`n`n$messageMail `n`nRegards, System message."
     Send-MailMessage -smtpserver $smtpserver -from $from -to $to -subject $subject -body $body -Credential $cred -priority High
 }
