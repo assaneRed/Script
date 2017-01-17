@@ -49,7 +49,7 @@ function mail
     param($subject, $messageMail)
     $smtpServer = "ssl0.ovh.net"
     #Looks for the password in the file cred.txt on the Jenkins server (the file contains the password saved as a secure string)
-    $pwd = Get-Content 'C:\Jenkins\cred.txt' | ConvertTo-SecureString
+    $pwd = cat 'C:\Jenkins\cred.txt' | ConvertTo-SecureString
     $cred = New-Object Management.Automation.PSCredential ('nrobidel@redtechnologies.fr',$pwd)
     $from = "Syncthing <nrobidel@redtechnologies.fr>"
     $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>")
