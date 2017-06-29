@@ -39,7 +39,7 @@ $connOVH = New-Object PSObject -Property @{IP="37.187.25.79"; API = "QJ5w7HBjlvv
 $connections = $connGIT, $connNAS, $connOVH
 
 # Parameters for getCompletion function (Objects with 6 properties : source server's IP and API Key, destination server's ID, array of folder's ID, source server's name and destination server's name) 
-$compGitNas = New-Object PSObject -Property @{IP="192.168.1.32"; API = "FoQZE5DLTPDlrdRuLxjIH0kd48h808Su"; DeviceID="YB355HA-PW5XWDP-R37EHXH-NQOYKSQ-2G5NCXS-GGGM2H2-AE5MSAP-LFI6SAU"; Folder="redmineFiles","redmineDb","gitrepositories", "Git + Redmine + SVN"; serverSource= "GIT"; serverDestination= "NAS"}
+$compGitNas = New-Object PSObject -Property @{IP="192.168.1.32"; API = "FoQZE5DLTPDlrdRuLxjIH0kd48h808Su"; DeviceID="YB355HA-PW5XWDP-R37EHXH-NQOYKSQ-2G5NCXS-GGGM2H2-AE5MSAP-LFI6SAU"; Folder="redmineFiles","redmineDb","gitrepositories","gitRedmineSvn"; serverSource= "GIT"; serverDestination= "NAS"}
 $compNasOvh = New-Object PSObject -Property @{IP="192.168.1.2"; API = "4mb4eJi3nTh-T6Zb2gvx-6qgzS-nKmd6"; DeviceID="PGF4U2Z-V7AD7KP-TMUU2P5-3UVG7BH-PD3XPIS-DJ5H54I-NADG2GT-BXZG2QU"; Folder="gitrepositories","SharedDisk"; serverSource= "NAS"; serverDestination= "OVH"}
 $completion = $compGitNas, $compNasOvh
 
