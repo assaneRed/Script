@@ -144,6 +144,7 @@ function testCompletion
         foreach($folder in $element.Folder)
         {
             $result = getCompletion $element $folder| Out-String
+			echo $result
             if(([regex]::Matches($result,100)).count -ne 1)
             {
                 $script:compteurErreursCompletion+=1
