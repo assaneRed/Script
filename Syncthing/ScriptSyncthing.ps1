@@ -36,8 +36,8 @@ $messageMail=""
 $connGIT = New-Object PSObject -Property @{IP="192.168.1.32"; API = "FoQZE5DLTPDlrdRuLxjIH0kd48h808Su"; Server= "GIT"}
 $connNAS = New-Object PSObject -Property @{IP="192.168.1.2"; API = "4mb4eJi3nTh-T6Zb2gvx-6qgzS-nKmd6"; Server= "NAS"}
 $connOVH = New-Object PSObject -Property @{IP="37.187.25.79"; API = "QJ5w7HBjlvvdtpISyo0k760evKiGWjb2"; Server= "OVH"}
-$connOVH = New-Object PSObject -Property @{IP="192.168.1.15"; API = "CguGvVEXH4kMnmUSSfNMVYqYkpk4zQQV"; Server= "JENKINS"}
-$connections = $connGIT, $connNAS, $connOVH
+$connJenkins = New-Object PSObject -Property @{IP="192.168.1.15"; API = "CguGvVEXH4kMnmUSSfNMVYqYkpk4zQQV"; Server= "JENKINS"}
+$connections = $connGIT, $connNAS, $connOVH, $connJenkins
 
 # Parameters for getCompletion function (Objects with 6 properties : source server's IP and API Key, destination server's ID, array of folder's ID, source server's name and destination server's name) 
 $compGitNas = New-Object PSObject -Property @{IP="192.168.1.32"; API="FoQZE5DLTPDlrdRuLxjIH0kd48h808Su"; DeviceID="YB355HA-PW5XWDP-R37EHXH-NQOYKSQ-2G5NCXS-GGGM2H2-AE5MSAP-LFI6SAU"; Folder="redmineFiles","redmineDb","gitrepositories","gitRedmineSvn"; serverSource= "GIT"; serverDestination= "NAS"}
