@@ -42,7 +42,7 @@ $connections = $connGIT, $connJenkins, $connOVH, $connNAS
 # Parameters for getCompletion function (Objects with 6 properties : source server's IP and API Key, destination server's ID, array of folder's ID, source server's name and destination server's name) 
 $compGitNas = New-Object PSObject -Property @{IP="192.168.1.32"; API="FoQZE5DLTPDlrdRuLxjIH0kd48h808Su"; DeviceID="YB355HA-PW5XWDP-R37EHXH-NQOYKSQ-2G5NCXS-GGGM2H2-AE5MSAP-LFI6SAU"; Folder="redmineFiles","redmineDb","gitrepositories","gitRedmineSvn"; serverSource= "GIT"; serverDestination= "NAS"}
 $compNasOvh = New-Object PSObject -Property @{IP="192.168.1.2"; API="4mb4eJi3nTh-T6Zb2gvx-6qgzS-nKmd6"; DeviceID="PGF4U2Z-V7AD7KP-TMUU2P5-3UVG7BH-PD3XPIS-DJ5H54I-NADG2GT-BXZG2QU"; Folder="gitrepositories","SharedDisk","gitRedmineSvn","gqqfj-kq4je"; serverSource= "NAS"; serverDestination= "OVH"}
-$compJenkinsNas = New-Object PSObject -Property @{IP="192.168.1.15"; API="CguGvVEXH4kMnmUSSfNMVYqYkpk4zQQV"; DeviceID ="YB355HA-PW5XWDP-R37EHXH-NQOYKSQ-2G5NCXS-GGGM2H2-AE5MSAP-LFI6SAU"; Folder="gqqfj-kq4je"; serverSource= "JENKINS"; serverDestination= "NAS"}
+$compJenkinsNas = New-Object PSObject -Property @{IP="192.168.1.15"; API="CguGvVEXH4kMnmUSSfNMVYqYkpk4zQQV"; DeviceID ="YB355HA-PW5XWDP-R37EHXH-NQOYKSQ-2G5NCXS-GGGM2H2-AE5MSAP-LFI6SAU"; Folder="gqqfj-kq4j"; serverSource= "JENKINS"; serverDestination= "NAS"}
 $completion = $compGitNas, $compNasOvh
 
 # Function used to send mails, takes 2 string parameters: subject and body of the mail
