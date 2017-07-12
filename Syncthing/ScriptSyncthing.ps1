@@ -56,7 +56,7 @@ function mail
     $pwd = cat 'C:\Program Files (x86)\Jenkins\workspace\Check Syncthing\Syncthing\securePass.txt'
     $cred = New-Object System.Management.Automation.PsCredential 'nrobidel@redtechnologies.fr',($pwd | ConvertTo-SecureString -Key $key)
     $from = "Syncthing <nrobidel@redtechnologies.fr>"
-    $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>")
+    $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>", "Paul LEREBOURG <plerebourg@redtechnologies.fr>")
     $body = "Hi,`n`n$messageMail `n`nRegards, System message."
     Send-MailMessage -smtpserver $smtpserver -from $from -to $to -subject $subject -body $body -Credential $cred -priority High
 }
