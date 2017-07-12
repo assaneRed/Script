@@ -105,7 +105,7 @@ function testConnection
             {
                 switch(([regex]::Matches($result, "true" )).count)
                 {
-                    3 {}
+                    (3 - $script:compteurErreursConnexions) {}
                     default
                     {
                        $script:compteurErreursConnexions += 1
