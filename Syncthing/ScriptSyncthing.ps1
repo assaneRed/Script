@@ -51,9 +51,9 @@ function mail
     param($subject, $messageMail)
     $smtpServer = "ssl0.ovh.net"
     # Encryption key
-    $key= cat 'C:\Program Files (x86)\Jenkins\workspace\Check Syncthing\Syncthing\key.txt'
+    $key= cat 'key.txt'
     # Password encrypted using the $key
-    $pwd = cat 'C:\Program Files (x86)\Jenkins\workspace\Check Syncthing\Syncthing\securePass.txt'
+    $pwd = cat 'securePass.txt'
     $cred = New-Object System.Management.Automation.PsCredential 'nrobidel@redtechnologies.fr',($pwd | ConvertTo-SecureString -Key $key)
     $from = "Syncthing <nrobidel@redtechnologies.fr>"
     $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>", "Paul LEREBOURG <plerebourg@redtechnologies.fr>")
@@ -97,7 +97,7 @@ function testConnection
     $message = ""
     foreach($element in $connexion)
     {
-		Write-Host "Checking connection to " + $element.Server
+		Write-Host "Checking connection to $element.Server"
         $result = getConnections $element.IP $element.API | Out-String
         switch($element.IP)
         {
