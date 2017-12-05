@@ -54,9 +54,9 @@ function mail
     $key= cat 'key.txt'
     # Password encrypted using the $key
     $pwd = cat 'securePass.txt'
-    $cred = New-Object System.Management.Automation.PsCredential 'nrobidel@redtechnologies.fr',($pwd | ConvertTo-SecureString -Key $key)
-    $from = "Syncthing <nrobidel@redtechnologies.fr>"
-    $to = @("Nicolas ROBIDEL <nrobidel@redtechnologies.fr>", "Paul LEREBOURG <plerebourg@redtechnologies.fr>")
+    $cred = New-Object System.Management.Automation.PsCredential 'plerebourg@redtechnologies.fr',($pwd | ConvertTo-SecureString -Key $key)
+    $from = "Syncthing <plerebourg@redtechnologies.fr>"
+    $to = @("Paul LEREBOURG <plerebourg@redtechnologies.fr>")
     $body = "Hi,`n`n$messageMail `n`nRegards, System message."
     Send-MailMessage -smtpserver $smtpserver -from $from -to $to -subject $subject -body $body -Credential $cred -priority High
 }
