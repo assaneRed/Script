@@ -97,6 +97,7 @@ function testConnection
     $message = ""
     foreach($element in $connexion)
     {
+		Write-Host "Checking connection to " + $element.Server
         $result = getConnections $element.IP $element.API | Out-String
         switch($element.IP)
         {
