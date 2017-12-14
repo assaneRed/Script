@@ -1,0 +1,11 @@
+INSTUPTifToHGT3
+E:\PythonProjects\GISPython\toHGT\TifToHGT3.py
+INFOS:&&3|1|2|0&&3|3|2|0&&3|4|2|0&&3|5|2|0&&3|6|2|0&&3|7|2|0&&3|8|2|0
+val=8
+countVide=7
+out_raster=3
+array=4
+targetWorkspace=1
+TifToHGT3=2
+hgtFileName=5
+test_file=6

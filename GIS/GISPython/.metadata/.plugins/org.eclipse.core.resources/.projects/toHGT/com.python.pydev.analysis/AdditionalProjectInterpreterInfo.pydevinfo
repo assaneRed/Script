@@ -1,0 +1,55 @@
+-- VERSION_4
+-- START DISKCACHE_2
+E:\PythonProjects\GISPython\.metadata\.plugins\org.eclipse.core.resources\.projects\toHGT\com.python.pydev.analysis\v2_indexcache
+localconfig|1502712483404336000|E:\PythonProjects\GISPython\toHGT\localconfig.py
+ftp_NLCD|1502874562716291000|E:\PythonProjects\GISPython\toHGT\ftp_NLCD.py
+ftp_3DEP_ref|1502874608559026000|E:\PythonProjects\GISPython\toHGT\ftp_3DEP_ref.py
+TifToHGT2|1511346599112702000|E:\PythonProjects\GISPython\toHGT\TifToHGT2.py
+resamplingCode|1508934381220456000|E:\PythonProjects\GISPython\toHGT\resamplingCode.py
+TifToHGT3|1511347208519800000|E:\PythonProjects\GISPython\toHGT\TifToHGT3.py
+del|1508923719534535000|E:\PythonProjects\GISPython\toHGT\del.py
+TifToHGT|1507710399082643000|E:\PythonProjects\GISPython\toHGT\TifToHGT.py
+ResampleBatchJob|1507710478447766000|E:\PythonProjects\GISPython\toHGT\ResampleBatchJob.py
+-- END DISKCACHE
+-- START DICTIONARY
+8
+8=localconfig
+6=ftp_NLCD
+7=ftp_3DEP_ref
+1=TifToHGT2
+4=resamplingCode
+3=TifToHGT3
+2=TifToHGT
+5=ResampleBatchJob
+-- END DICTIONARY
+-- START TREE 1
+25
+arr|5|array!11@array!19@array!27@array!35@array!43@
+cou|5|countVide!35@countVide!11@countVide!27@countVide!43@countVide!19@
+fil|2|fileList!51@fileList!59@
+ftp|10|FTP_USER!59@FTP_DIR!51@FTP_PWD!51@ftp!51@ftp!59@FTP_USER!51@FTP_ADDRESS!51@FTP_PWD!59@FTP_ADDRESS!59@FTP_DIR!59@
+hgt|5|hgtFileName!19@hgtFileName!27@hgtFileName!35@hgtFileName!11@hgtFileName!43@
+ifi|2|ifile!51@ifile!59@
+in_|1|in_raster!35@
+inr|1|inRasterToArray!35@
+nlc|1|NLCD_DIR!67@
+out|8|outRasterPointY!35@out_raster!19@out_raster!43@outfile!59@out_raster!11@out_raster!27@outRasterPointX!35@outfile!51@
+sna|1|snapRaster!35@
+tar|5|targetWorkspace!19@targetWorkspace!35@targetWorkspace!27@targetWorkspace!43@targetWorkspace!11@
+ter|1|TERRAIN_DIR!67@
+tes|4|test_file!19@test_file!43@test_file!11@test_file!27@
+upd|1|UPDATE_TIME!67@
+val|4|val!19@val!27@val!35@val!11@
+x|1|x!35@
+xin|1|xIndexIninputRaster!35@
+xma|1|xmax!35@
+xmi|1|xmin!35@
+y|1|y!35@
+yin|1|yIndexIninputRaster!35@
+yma|1|ymax!35@
+ymi|1|ymin!35@
+zf|2|zf!51@zf!59@
+-- END TREE
+-- START TREE 2
+0
+-- END TREE

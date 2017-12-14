@@ -1,0 +1,10 @@
+MODULES_MANAGER_V2
+ResampleBatchJob|E:\PythonProjects\GISPython\toHGT\ResampleBatchJob.py
+TifToHGT|E:\PythonProjects\GISPython\toHGT\TifToHGT.py
+TifToHGT2|E:\PythonProjects\GISPython\toHGT\TifToHGT2.py
+TifToHGT3|E:\PythonProjects\GISPython\toHGT\TifToHGT3.py
+del|E:\PythonProjects\GISPython\toHGT\del.py
+ftp_3DEP_ref|E:\PythonProjects\GISPython\toHGT\ftp_3DEP_ref.py
+ftp_NLCD|E:\PythonProjects\GISPython\toHGT\ftp_NLCD.py
+localconfig|E:\PythonProjects\GISPython\toHGT\localconfig.py
+resamplingCode|E:\PythonProjects\GISPython\toHGT\resamplingCode.py
