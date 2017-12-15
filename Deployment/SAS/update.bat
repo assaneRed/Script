@@ -5,6 +5,8 @@ set jenkinsExt=80.12.89.158
 set versionFile=last
 set sasApplication=SAS
 
+IF "%~1"=="" GOTO WRONGPARAM
+
 ping -n 1 %jenkinsLocal%
 IF %ERRORLEVEL% NEQ 0 (
 	ping -n 1 %jenkinsExt%
@@ -26,17 +28,21 @@ set ip=%jenkinsExt%:1515
 set url=http://%ip%/delivery/sas/
 set urlVersion=%url%versions/
 
-IF "%~1"=="" GOTO DOWNLOADLAST
-set lastVersion=%1
-GOTO DOWNLOADVERSION
-
-:DOWNLOADLAST
-curl -O -s %urlVersion%%versionFile%
-for /f "delims=" %%i in (%versionFile%) do (
-	set lastVersion=%%i
+IF "%~1"=="-v" (
+	IF "%~2"=="" GOTO WRONGPARAM
+	set lastVersion=%2
+	GOTO DOWNLOADSPECIFICVERSION
+) else (
+	set solutionVersion=%1
+	echo Downloading !solutionVersion!
+	curl -O -s %urlVersion%!solutionVersion!
+	for /f "delims=" %%i in (!solutionVersion!) do (
+		set lastVersion=%%i
+		GOTO DOWNLOADSPECIFICVERSION
+	)
 )
 
-:DOWNLOADVERSION
+:DOWNLOADSPECIFICVERSION
 echo Downloading !lastVersion!
 curl -O -s %urlVersion%!lastVersion!
 GOTO PROCESS
@@ -188,6 +194,12 @@ for /f "tokens=1,2* delims=_" %%i in ('dir /b /a:d') do (
 echo !versionToInstall! installed successfully
 
 GOTO EXIT
+
+:WRONGPARAM
+echo Incorrect number of parameter: version should be given as parameter
+echo use -v vX.Y.Z.R to update to specific version
+echo use vX.Y.Z to install last revision of vX.Y.Z version
+exit /B 2
 
 :ERROR
 echo Error: at least one error happened
